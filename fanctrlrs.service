@@ -1,0 +1,11 @@
+[Unit]
+Description=Temperature control of Raspberry Pi fan through GPIO port
+
+[Service]
+ExecStart= /home/alarm/.cargo/bin/fanctrlrs
+Restart=on-success
+RestartSec=200ms
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

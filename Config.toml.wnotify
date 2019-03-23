@@ -1,0 +1,12 @@
+pin = 18
+seconds = 5
+
+[temperature]
+file = "/sys/class/thermal/thermal_zone0/temp"
+max = 60
+min = 45
+
+[telegram]
+token = "YOUR_TOKEN"
+chat_id = "YOU_CHAT_ID_NUMBER"
+
