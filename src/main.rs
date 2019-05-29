@@ -15,8 +15,6 @@ macro_rules! CFG_FILE {
     () => { "../Config.toml"; };
 }
 
-const BASE_URL: &str = "https://api.telegram.org/bot";
-
 #[derive(Deserialize, Debug)]
 struct Config {
     pin: u8,
@@ -52,13 +50,14 @@ impl Temperature {
 
 #[cfg(feature = "notify")]
 impl TelegramConf {
+    const BASE_URL: &str = "https://api.telegram.org/bot";
+
     fn send_message(&self, msg: &str) -> Result<(), Error> {
         let params = [("chat_id", &(*self.chat_id)), ("text", msg)];
         let res = reqwest::Client::new()
             .post(format!("{}{}/sendMessage", BASE_URL, self.token).as_str())
             .form(&params)
-            .send()?
-            .error_for_status();
+            .send();
 
         if let Err(err) = res {
             println!("{}", err);

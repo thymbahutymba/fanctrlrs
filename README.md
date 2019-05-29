@@ -1,4 +1,7 @@
 # fanctrlrs
+
+[![Build Status](https://travis-ci.org/thymbahutymba/fanctrlrs.svg?branch=master)](https://travis-ci.org/thymbahutymba/fanctrlrs)
+
 Fan control program written in rust with notification via telegram bot.
 
 For make it work you have to install rust toolchain in your computer and compile
