@@ -35,7 +35,7 @@ install:
     fi
           
 script:
-  - cargo build --target $TARGET --verbose --release --feature notify
+  - cargo build --target $TARGET --verbose --release --features notify
 
 before_deploy:
   - tar -czf $PACKAGE -C target/$TARGET/release/ $NAME
