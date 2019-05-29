@@ -2,17 +2,21 @@ use failure::Error;
 use rust_gpiozero::output_devices;
 use serde::Deserialize;
 use std::{
-    fs::File,
-    io::Read,
+    fs,
+    path::PathBuf,
     sync::{
         atomic::{AtomicBool, Ordering},
         Arc,
     },
     thread, time,
 };
+use structopt::StructOpt;
 
-macro_rules! CFG_FILE {
-    () => { "../Config.toml"; };
+#[derive(StructOpt, Debug)]
+#[structopt(raw(setting = "structopt::clap::AppSettings::ColoredHelp"))]
+struct Opt {
+    #[structopt(long, short, help = "Path to configuration file.", parse(from_os_str))]
+    config_file: PathBuf,
 }
 
 #[derive(Deserialize, Debug)]
@@ -38,7 +42,8 @@ struct TelegramConf {
 
 impl Config {
     fn load() -> Result<Self, Error> {
-        Ok(toml::from_str(include_str!(CFG_FILE!()))?)
+        let cfg_file = fs::canonicalize(Opt::from_args().config_file)?;
+        Ok(toml::from_str(&fs::read_to_string(cfg_file)?)?)
     }
 }
 
@@ -50,12 +55,12 @@ impl Temperature {
 
 #[cfg(feature = "notify")]
 impl TelegramConf {
-    const BASE_URL: &str = "https://api.telegram.org/bot";
+    const BASE_URL: &'static str = "https://api.telegram.org/bot";
 
     fn send_message(&self, msg: &str) -> Result<(), Error> {
         let params = [("chat_id", &(*self.chat_id)), ("text", msg)];
         let res = reqwest::Client::new()
-            .post(format!("{}{}/sendMessage", BASE_URL, self.token).as_str())
+            .post(format!("{}{}/sendMessage", TelegramConf::BASE_URL, self.token).as_str())
             .form(&params)
             .send();
 
@@ -88,10 +93,7 @@ fn main() -> Result<(), Error> {
     }
 
     while !shutdown.load(Ordering::Relaxed) {
-        let mut file = File::open(&config.temperature.file)?;
-        let mut contents = String::new();
-
-        file.read_to_string(&mut contents)?;
+        let contents = fs::read_to_string(&config.temperature.file)?;
 
         let temperature = (contents.trim().parse::<u64>()?) / 1000;
 
