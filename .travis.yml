@@ -1,0 +1,50 @@
+language: rust
+cache: 
+  - cargo
+  - apt
+  
+os:
+  - linux
+
+rust:
+  - stable
+
+matrix:
+  include:
+    - env:
+      - NAME=fanctrlrs
+      - TARGET=armv7-unknown-linux-gnueabihf 
+      - LINKER=arm-linux-gnueabihf-gcc 
+      - PACKAGE=$NAME-rpi3.tar.gz
+      addons:
+        apt:
+          packages:
+            - gcc-arm-linux-gnueabihf
+            - libc6-armhf-cross
+            - libc6-dev-armhf-cross
+
+install:
+  - export PATH="$PATH:$HOME/.cargo/bin"
+  - rustup target add $TARGET || true
+  - echo -e "[features]\ndefault = [\"openssl/vendored\"]\n" >> Cargo.toml
+  - echo -e "[dependencies.openssl]\noptional = true\n" >> Cargo.toml
+  - |
+    if [ -n "$LINKER" ]; then
+      mkdir -p ~/.cargo
+      echo -e "\n[target.$TARGET]\nlinker = \"$LINKER\"\n" > ~/.cargo/config
+    fi
+          
+script:
+  - cargo build --target $TARGET --verbose --release
+
+before_deploy:
+  - tar -czf $PACKAGE -C target/$TARGET/release/ $NAME
+
+deploy:
+  provider: releases
+  api_key: 
+    secure: $GITHUB_TOKEN
+  file: ${PACKAGE}
+  skip_cleanup: true
+  on:
+      tags: true
