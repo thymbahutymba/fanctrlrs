@@ -26,7 +26,7 @@ matrix:
 install:
   - export PATH="$PATH:$HOME/.cargo/bin"
   - rustup target add $TARGET || true
-  - echo -e "[features]\ndefault = [\"openssl/vendored\"]\n" >> Cargo.toml
+  - echo -e "\ndefault = [\"openssl/vendored\"]\n" >> Cargo.toml
   - echo -e "[dependencies.openssl]\noptional = true\n" >> Cargo.toml
   - |
     if [ -n "$LINKER" ]; then
@@ -35,7 +35,7 @@ install:
     fi
           
 script:
-  - cargo build --target $TARGET --verbose --release
+  - cargo build --target $TARGET --verbose --release --feature notify
 
 before_deploy:
   - tar -czf $PACKAGE -C target/$TARGET/release/ $NAME
