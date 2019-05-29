@@ -1,6 +1,4 @@
-# fanctrlrs
-
-[![Build Status](https://travis-ci.org/thymbahutymba/fanctrlrs.svg?branch=master)](https://travis-ci.org/thymbahutymba/fanctrlrs)
+# fanctrlrs [![Build Status](https://travis-ci.org/thymbahutymba/fanctrlrs.svg?branch=master)](https://travis-ci.org/thymbahutymba/fanctrlrs)
 
 Fan control program written in rust with notification via telegram bot.
 
@@ -9,9 +7,9 @@ the program with `cargo`.
 
 If you wish to have telegram notification you have to compile with notify feature. In this case your `Config.toml` have to contain the `[telegram]` section.
 ```
-$ cargo build --feature notify --release
+$ cargo build --features notify --release
 ```
-Whether you want not this feature it's enough to compile without `--feature notify`
+Whether you want not this feature it's enough to compile without `--features notify`
 
 It is also provide a systemd file service that have to be copied into the correct directory
 ```

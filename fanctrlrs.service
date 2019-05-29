@@ -1,8 +1,8 @@
 [Unit]
-Description=Temperature control of Raspberry Pi fan through GPIO port
+Description=Raspberry cpu temperature regulator through a fan that acts at a certain threshold
 
 [Service]
-ExecStart= /home/alarm/.cargo/bin/fanctrlrs
+ExecStart=/home/alarm/.cargo/bin/fanctrlrs -c /home/alarm/fanctrlrs/Config.toml
 Restart=on-success
 RestartSec=200ms
 ExecReload=/bin/kill -HUP $MAINPID

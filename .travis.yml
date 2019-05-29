@@ -28,7 +28,6 @@ install:
   - rustup target add $TARGET || true
   - echo -e "\ndefault = [\"openssl/vendored\"]\n" >> Cargo.toml
   - echo -e "[dependencies.openssl]\noptional = true\n" >> Cargo.toml
-  - cp Config.toml.wonotify Config.toml
   - |
     if [ -n "$LINKER" ]; then
       mkdir -p ~/.cargo
@@ -36,7 +35,7 @@ install:
     fi
           
 script:
-  - cargo build --target $TARGET --verbose --release
+  - cargo build --features notify --target $TARGET --verbose --release
 
 before_deploy:
   - tar -czf $PACKAGE -C target/$TARGET/release/ $NAME
