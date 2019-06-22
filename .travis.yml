@@ -40,7 +40,6 @@ script:
 before_deploy:
   - cd target/$TARGET/release/
   - sha256sum ${NAME} > ${NAME}.sha256
-  - ls -al
   # - tar -czf $PACKAGE -C target/$TARGET/release/ $NAME
 
 deploy:
@@ -48,7 +47,9 @@ deploy:
   api_key: 
     secure: $GITHUB_TOKEN
   # file: ${PACKAGE}
-  file: target/$TARGET/release/${NAME}.*
+  file: 
+    - ${NAME}
+    - ${NAME}.sha256
   skip_cleanup: true
   on:
       tags: true
