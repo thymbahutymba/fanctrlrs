@@ -38,8 +38,8 @@ script:
   - cargo build --features notify --target $TARGET --verbose --release
 
 before_deploy:
+  cd target/$TARGET/release/ && sha256sum ${NAME} > ${NAME}.sha256
   # - tar -czf $PACKAGE -C target/$TARGET/release/ $NAME
-  sha256sum target/$TARGET/release/$NAME > ${NAME}.sha256
 
 deploy:
   provider: releases
@@ -48,7 +48,7 @@ deploy:
   # file: ${PACKAGE}
   file: 
     - target/$TARGET/release/${NAME}
-    - ${NAME}.sha256
+    - target/$TARGET/release/${NAME}.sha256
   skip_cleanup: true
   on:
       tags: true
