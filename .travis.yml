@@ -38,13 +38,17 @@ script:
   - cargo build --features notify --target $TARGET --verbose --release
 
 before_deploy:
-  - tar -czf $PACKAGE -C target/$TARGET/release/ $NAME
+  # - tar -czf $PACKAGE -C target/$TARGET/release/ $NAME
+  sha256sum target/$TARGET/release/$NAME > ${NAME}.sha256
 
 deploy:
   provider: releases
   api_key: 
     secure: $GITHUB_TOKEN
-  file: ${PACKAGE}
+  # file: ${PACKAGE}
+  file: 
+    - target/$TARGET/release/${NAME}
+    - ${NAME}.sha256
   skip_cleanup: true
   on:
       tags: true
