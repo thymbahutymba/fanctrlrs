@@ -50,15 +50,16 @@ script:
 
 before_deploy:
   - cd target/$TARGET/release/
-  - sha256sum ${NAME} > ${NAME}.sha256
+  - mv ${NAME} ${PACKAGE}
+  - sha256sum ${PACKAGE} > ${PACKAGE}.sha256
 
 deploy:
   provider: releases
   api_key: 
     secure: $GITHUB_TOKEN
   file: 
-    - ${NAME}
-    - ${NAME}.sha256
+    - ${PACKAGE}
+    - ${PACKAGE}.sha256
   skip_cleanup: true
   on:
       tags: true
