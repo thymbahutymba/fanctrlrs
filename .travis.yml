@@ -15,13 +15,24 @@ matrix:
       - NAME=fanctrlrs
       - TARGET=armv7-unknown-linux-gnueabihf 
       - LINKER=arm-linux-gnueabihf-gcc 
-      - PACKAGE=$NAME-rpi3.tar.gz
+      - PACKAGE=$NAME-rpi3-armv7.tar.gz
       addons:
         apt:
           packages:
             - gcc-arm-linux-gnueabihf
             - libc6-armhf-cross
             - libc6-dev-armhf-cross
+    - env:
+      - NAME=fanctrlrs
+      - TARGET=aarch64-unknown-linux-gnu	 
+      - LINKER=aarch64-linux-gnu-gcc
+      - PACKAGE=$NAME-rpi3-aarch64.tar.gz
+      addons:
+        apt:
+          packages:
+            - gcc-aarch64-linux-gnu
+            - libc6-dev-arm64-cross
+
 
 install:
   - export PATH="$PATH:$HOME/.cargo/bin"
@@ -40,13 +51,11 @@ script:
 before_deploy:
   - cd target/$TARGET/release/
   - sha256sum ${NAME} > ${NAME}.sha256
-  # - tar -czf $PACKAGE -C target/$TARGET/release/ $NAME
 
 deploy:
   provider: releases
   api_key: 
     secure: $GITHUB_TOKEN
-  # file: ${PACKAGE}
   file: 
     - ${NAME}
     - ${NAME}.sha256
