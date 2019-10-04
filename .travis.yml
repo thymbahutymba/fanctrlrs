@@ -15,7 +15,7 @@ matrix:
       - NAME=fanctrlrs
       - TARGET=armv7-unknown-linux-gnueabihf 
       - LINKER=arm-linux-gnueabihf-gcc 
-      - PACKAGE=$NAME-rpi3-armv7.tar.gz
+      - PACKAGE=$NAME-rpi3-armv7
       addons:
         apt:
           packages:
@@ -26,7 +26,7 @@ matrix:
       - NAME=fanctrlrs
       - TARGET=aarch64-unknown-linux-gnu	 
       - LINKER=aarch64-linux-gnu-gcc
-      - PACKAGE=$NAME-rpi3-aarch64.tar.gz
+      - PACKAGE=$NAME-rpi3-aarch64
       addons:
         apt:
           packages:
