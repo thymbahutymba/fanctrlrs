@@ -9,7 +9,7 @@ use std::{
         Arc,
     },
     thread, time,
-	error::Error,
+	error::Error as StdError,
 };
 use structopt::StructOpt;
 
