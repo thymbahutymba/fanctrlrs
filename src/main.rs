@@ -65,7 +65,7 @@ impl TelegramConf {
             .send();
 
         if let Err(err) = res {
-            println!("{}", err);
+            println!("{}", err.source().unwrap());
         }
         Ok(())
     }
