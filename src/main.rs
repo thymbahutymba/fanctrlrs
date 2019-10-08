@@ -65,8 +65,8 @@ impl TelegramConf {
             .form(&params)
             .send();
 
-        if let Err(err) = res {
-            println!("{}", err.source().unwrap());
+        if let Err(_) = res {
+            println!("Error sending telegram message.");
         }
         Ok(())
     }
